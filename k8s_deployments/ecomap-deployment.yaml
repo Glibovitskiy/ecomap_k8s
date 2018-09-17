@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ecomap
+  labels:
+    app: ecomap
+spec:
+  ports:
+  - port: 80
+  selector:
+    app: ecomap
+    tier: frontend
+  type: LoadBalancer
+  externalIPs:
+  - 192.168.57.106
+ 
+---
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: ecomap
+  labels:
+    app: ecomap
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ecomap
+      tier: frontend
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: ecomap
+        tier: frontend
+    spec:
+      containers:
+      - image: leo160886/ecomap
+        name: ecomap
+        env:
+        - name: ECOMAP_DB_HOST
+          value: ecomap-mysql
+        - name: ECOMAP_DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-pass
+              key: password
+        ports:
+        - containerPort: 80
+          name: ecomap
