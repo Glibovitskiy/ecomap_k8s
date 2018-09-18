@@ -13,23 +13,23 @@ Both images have been already built and pushed to DockerHub:
 - Access to DockerHub in order to pull images
 
 ### Setup guide
-1. Clone this repo:
+I. Clone this repo:
 
   `git clone https://github.com/Glibovitskiy/ecomap_k8s.git`
 
-2. Create secret holding MySQL root password:
+II. Create secret holding MySQL root password:
 
   `kubectl create secret generic mysql-pass --from-literal=password=YOUR_PASSWORD`
 
   **YOUR_PASSWORD** should be changed to new password, secret name **mysql-pass** and secret key **password** should not be changed since they are referenced in deployment manifests
 
-3. Modify LoadBalancer service:
+III. Modify LoadBalancer service:
 
   Since we are running LoadBalancer service on baremetal we can not summon cloud-specific load balancer and should pin our application frontend to the external ip of any of the kubernetes nodes
 
   In [file](k8s_deployments/ecomap-deployment.yaml) line **15** should be replaced with any external ip of node running kubernetes
 
-4. Run deployments:
+IV. Run deployments:
 
    Deployment manifests can be located in [k8s_deployments folder](k8s_deployments)
    - create database deployment:
@@ -40,7 +40,7 @@ Both images have been already built and pushed to DockerHub:
 
      `kubectl create -f ecomap-deployment.yaml`
 
-5. Verifying deployment:
+V. Verifying deployment:
 
    - pod verification:
 
